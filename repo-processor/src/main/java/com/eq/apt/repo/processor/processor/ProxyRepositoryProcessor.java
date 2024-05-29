@@ -1,5 +1,6 @@
 package com.eq.apt.repo.processor.processor;
 
+import com.easy.query.core.annotation.EntityProxy;
 import com.eq.apt.repo.processor.annotations.ProxyRepository;
 import com.eq.apt.repo.processor.templates.AptCreatorHelper;
 import com.eq.apt.repo.processor.templates.AptFileCompiler;
@@ -20,6 +21,7 @@ import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -31,8 +33,8 @@ import java.util.function.Consumer;
  *
  * @author xuejiaming
  */
-@SupportedAnnotationTypes({"com.eq.apt.repo.processor.annotations.ProxyRepository"})
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+//@SupportedAnnotationTypes({"com.eq.apt.repo.processor.annotations.ProxyRepository"})
+//@SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ProxyRepositoryProcessor extends AbstractProcessor {
     private Filer filer;
     private Elements elementUtils;
@@ -43,6 +45,17 @@ public class ProxyRepositoryProcessor extends AbstractProcessor {
         this.filer = processingEnv.getFiler();
         this.elementUtils = processingEnv.getElementUtils();
         this.typeUtils = processingEnv.getTypeUtils();
+    }
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        Set<String> supportedAnnotationTypes = new HashSet<>();
+        supportedAnnotationTypes.add(ProxyRepository.class.getCanonicalName());
+        return supportedAnnotationTypes;
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
     }
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
